@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>indexed. | Under Construction</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        @font-face {
+            font-family: 'Impetous';
+            src: url('assets/impetous.ttf') format('truetype');
+            font-weight: normal; font-style: normal; font-display: swap;
+        }
+
+        :root {
+            --brand-dark: #584512;
+            --brand-light-blob: #75682F;
+            --logo-font: 'Impetous', sans-serif;
+            --body-font: 'Figtree', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--body-font);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background-color: var(--brand-dark);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient Layer with "Breathing" Blob */
+        .blob-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: 
+                radial-gradient(
+                    circle at var(--blob-x, 50%) var(--blob-y, 50%), 
+                    var(--brand-light-blob) 0%, 
+                    transparent var(--blob-size, 60%)
+                ),
+                radial-gradient(
+                    circle at var(--ripple-x, 50%) var(--ripple-y, 50%), 
+                    rgba(117, 104, 47, 0.3) 0%, 
+                    var(--brand-dark) 85%
+                );
+        }
+
+        /* Subtler Grain Overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.12; /* Reduced for a cleaner look */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .logo-text {
+            font-family: var(--logo-font);
+            font-size: 4.5rem;
+            color: #ffffff;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #ffffff;
+            color: var(--brand-dark);
+            padding: 18px 40px;
+            border-radius: 2px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: all 0.4s ease;
+        }
+
+        .button:hover {
+            background-color: transparent;
+            color: #ffffff;
+            box-shadow: inset 0 0 0 2px #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob-bg" id="blob"></div>
+
+    <div class="container">
+        <a href="#" class="logo-text">indexed.</a>
+        <div class="status-pill">STATUS: SITE_UNDER_CONSTRUCTION</div>
+        <h2>SOMETHING NEW IS ARRIVING SOON.</h2>
+        <a href="mailto:indexed.design@gmail.com" class="button">Get in Touch</a>
+    </div>
+
+    <script>
+        const blob = document.getElementById('blob');
+        
+        let currentX = 50, currentY = 50;
+        let targetX = 50, targetY = 50;
+        let rippleX = 50, rippleY = 50;
+        let time = 0;
+        
+        const lerpSpeed = 0.006; 
+        const rippleSpeed = 0.003;
+
+        function updateTarget() {
+            targetX = Math.random() * 100;
+            targetY = Math.random() * 100;
+            setTimeout(updateTarget, Math.random() * 4000 + 2000);
+        }
+
+        function animate() {
+            time += 0.008; // Slightly slower breathing
+
+            currentX += (targetX - currentX) * lerpSpeed;
+            currentY += (targetY - currentY) * lerpSpeed;
+
+            rippleX += (targetX - rippleX) * rippleSpeed;
+            rippleY += (targetY - rippleY) * rippleSpeed;
+
+            // Oscillate size between 50% and 75%
+            const blobSize = 62.5 + Math.sin(time) * 12.5;
+
+            blob.style.setProperty('--blob-x', `${currentX}%`);
+            blob.style.setProperty('--blob-y', `${currentY}%`);
+            blob.style.setProperty('--ripple-x', `${rippleX}%`);
+            blob.style.setProperty('--ripple-y', `${rippleY}%`);
+            blob.style.setProperty('--blob-size', `${blobSize}%`);
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTarget();
+        animate();
+    </script>
+</body>
+</html>
